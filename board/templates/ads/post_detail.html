@@ -1,0 +1,53 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <h1>{{ post.title }}</h1>
+
+    <p>Категория: {{ post.get_category_display }}</p>
+    <p>Автор: {{ post.author.username }}</p>
+    <p>Дата создания: {{ post.created_at }}</p>
+
+    {% if post.image1 %}
+        <img src="{{ post.image1.url }}" alt="{{ post.title }} - Image 1" width="300">
+    {% endif %}
+    {% if post.image2 %}
+        <img src="{{ post.image2.url }}" alt="{{ post.title }} - Image 2" width="300">
+    {% endif %}
+
+    {% if post.video1 %}
+        <iframe width="560" height="315" src="{{ post.video1 }}" frameborder="0" allowfullscreen></iframe>
+    {% endif %}
+    {% if post.video2 %}
+        <iframe width="560" height="315" src="{{ post.video2 }}" frameborder="0" allowfullscreen></iframe>
+    {% endif %}
+
+    {{ post.content|safe }}
+
+    {% if user.is_authenticated %}
+        {% if user == post.author %}
+            <a href="{% url 'post_edit' post.pk %}" class="btn btn-primary">Редактировать</a>
+        {% endif %}
+        <h2>Оставить отклик</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ response_form.as_p }}
+            <button type="submit">Отправить</button>
+        </form>
+    {% else %}
+        <p>Чтобы оставить отклик, <a href="{% url 'account_login' %}">войдите</a>
+           или <a href="{% url 'account_signup' %}">зарегистрируйтесь</a>.</p>
+    {% endif %}
+
+    <h2>Отклики:</h2>
+    {% if responses %}
+        {% for response in responses %}
+            <p>Отклик: {{ response.text }}</p>
+            <p>Автор: {{ response.author.username }}</p>
+            <p>Статус: {{ response.get_status_display }}</p>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>Пока нет откликов на это объявление.</p>
+    {% endif %}
+
+{% endblock content %}

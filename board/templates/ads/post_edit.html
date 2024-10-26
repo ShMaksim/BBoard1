@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+{% load ckeditor_tags %}
+
+{% block content %}
+    <h1>Редактировать объявление</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.title.as_p }}
+        {{ form.content|ckeditor }}
+        <button type="submit">Сохранить</button>
+    </form>
+{% endblock content %}

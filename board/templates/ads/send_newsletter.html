@@ -1,0 +1,10 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <h1>Отправить рассылку "{{ newsletter.subject }}"</h1>
+    <form method="post">
+        {% csrf_token %}
+        <p>Вы уверены, что хотите отправить эту рассылку?</p>
+        <button type="submit">Отправить</button>
+    </form>
+{% endblock content %}
